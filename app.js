@@ -11,6 +11,8 @@ app.use(express.json());
 
 let database = null;
 
+
+//Intialize Db And Server
 const initializeDbAndServer = async () => {
   try {
     database = await open({
@@ -28,6 +30,8 @@ const initializeDbAndServer = async () => {
 
 initializeDbAndServer();
 
+
+//Converting Movie Object To Response Object
 const convertMovieDbObjectToResponseObject = (dbObject) => {
   return {
     movieId: dbObject.movie_id,
@@ -37,6 +41,7 @@ const convertMovieDbObjectToResponseObject = (dbObject) => {
   };
 };
 
+//Converting Director Db Object To Response Object
 const convertDirectorDbObjectToResponseObject = (dbObject) => {
   return {
     directorId: dbObject.director_id,
@@ -44,6 +49,7 @@ const convertDirectorDbObjectToResponseObject = (dbObject) => {
   };
 };
 
+//Getting Movies Names From Database
 app.get("/movies/", async (request, response) => {
   const getMoviesQuery = `
     SELECT
@@ -56,6 +62,7 @@ app.get("/movies/", async (request, response) => {
   );
 });
 
+//Getting Movie Name From Database
 app.get("/movies/:movieId/", async (request, response) => {
   const { movieId } = request.params;
   const getMovieQuery = `
@@ -69,6 +76,8 @@ app.get("/movies/:movieId/", async (request, response) => {
   response.send(convertMovieDbObjectToResponseObject(movie));
 });
 
+
+//Pushing New Movie Details to Database
 app.post("/movies/", async (request, response) => {
   const { directorId, movieName, leadActor } = request.body;
   const postMovieQuery = `
@@ -80,6 +89,8 @@ app.post("/movies/", async (request, response) => {
   response.send("Movie Successfully Added");
 });
 
+
+//Updating Movie Details on Database
 app.put("/movies/:movieId/", async (request, response) => {
   const { directorId, movieName, leadActor } = request.body;
   const { movieId } = request.params;
@@ -97,6 +108,7 @@ app.put("/movies/:movieId/", async (request, response) => {
   response.send("Movie Details Updated");
 });
 
+//Deleting Movie Details from Databasw
 app.delete("/movies/:movieId/", async (request, response) => {
   const { movieId } = request.params;
   const deleteMovieQuery = `
@@ -108,6 +120,7 @@ app.delete("/movies/:movieId/", async (request, response) => {
   response.send("Movie Removed");
 });
 
+//Getting Directors Details From Database
 app.get("/directors/", async (request, response) => {
   const getDirectorsQuery = `
     SELECT
@@ -122,6 +135,7 @@ app.get("/directors/", async (request, response) => {
   );
 });
 
+//Getting Movie Director Details From Database
 app.get("/directors/:directorId/movies/", async (request, response) => {
   const { directorId } = request.params;
   const getDirectorMoviesQuery = `
